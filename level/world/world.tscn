@@ -1,0 +1,135 @@
+[gd_scene load_steps=24 format=3 uid="uid://ddt7jotntxd5m"]
+
+[ext_resource type="Texture2D" uid="uid://bpr020pmrwux2" path="res://addons/kenney_prototype_textures/orange/texture_01.png" id="1_f3sb7"]
+[ext_resource type="Script" uid="uid://ces1j6plojyra" path="res://addons/godot-xr-tools/xr/start_xr.gd" id="1_fj7yv"]
+[ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="1_tlwt5"]
+[ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="4_036b0"]
+[ext_resource type="Script" uid="uid://ck4yn3hxuobj7" path="res://addons/godot-xr-tools/player/player_body.gd" id="4_dwbse"]
+[ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="5_dwbse"]
+[ext_resource type="PackedScene" uid="uid://fiul51tsyoop" path="res://addons/godot-xr-tools/functions/function_teleport.tscn" id="6_pkg7o"]
+[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="7_gbfbk"]
+[ext_resource type="Script" uid="uid://b18kkstg643yw" path="res://addons/godot-xr-tools/functions/function_pickup.gd" id="8_2o6r5"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="9_ioo17"]
+[ext_resource type="Script" uid="uid://dx3swqg2owe4p" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand.gd" id="10_k3n1d"]
+[ext_resource type="Animation" uid="uid://nq3xh1olqipq" path="res://addons/godot-xr-tools/hands/animations/left/Grip Shaft.res" id="11_2o6r5"]
+[ext_resource type="Script" uid="uid://bfrlpbsqg5lqr" path="res://addons/godot-xr-tools/objects/pickable.gd" id="11_70uel"]
+[ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="12_70uel"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f3sb7"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_fj7yv"]
+sky_material = SubResource("ProceduralSkyMaterial_f3sb7")
+
+[sub_resource type="Environment" id="Environment_tlwt5"]
+background_mode = 2
+sky = SubResource("Sky_fj7yv")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fj7yv"]
+albedo_texture = ExtResource("1_f3sb7")
+uv1_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tlwt5"]
+size = Vector2(1000, 1000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aqk2v"]
+size = Vector3(1000, 0.1, 1000)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ioo17"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wse8f"]
+margin = 0.01
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="Resource" id="Resource_70uel"]
+script = ExtResource("12_70uel")
+closed_pose = ExtResource("11_2o6r5")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[node name="Node3D" type="Node3D"]
+
+[node name="XRSimulator" parent="." instance=ExtResource("1_tlwt5")]
+controller_selection_mode = 1
+
+[node name="XRToolsStartXR" type="Node" parent="."]
+script = ExtResource("1_fj7yv")
+metadata/_custom_type_script = "uid://ces1j6plojyra"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_tlwt5")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+light_energy = 0.1
+shadow_enabled = true
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+material_override = SubResource("StandardMaterial3D_fj7yv")
+mesh = SubResource("PlaneMesh_tlwt5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_aqk2v")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRToolsPlayerBody" type="CharacterBody3D" parent="XROrigin3D"]
+script = ExtResource("4_dwbse")
+metadata/_custom_type_script = "uid://ck4yn3hxuobj7"
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 1.11)
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.4, 0.663765)
+tracker = &"left_hand"
+
+[node name="LeftHand" parent="XROrigin3D/LeftHand" instance=ExtResource("4_036b0")]
+
+[node name="FunctionTeleport" parent="XROrigin3D/LeftHand" instance=ExtResource("6_pkg7o")]
+
+[node name="MovementDirect" parent="XROrigin3D/LeftHand" instance=ExtResource("7_gbfbk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -1.4, -0.663765)
+
+[node name="XRToolsFunctionPickup" type="Node3D" parent="XROrigin3D/LeftHand"]
+script = ExtResource("8_2o6r5")
+metadata/_custom_type_script = "uid://b18kkstg643yw"
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.4, 0.663765)
+tracker = &"right_hand"
+
+[node name="RightHand" parent="XROrigin3D/RightHand" instance=ExtResource("5_dwbse")]
+
+[node name="MovementTurn" parent="XROrigin3D/RightHand" instance=ExtResource("9_ioo17")]
+turn_mode = 2
+
+[node name="XRToolsPickable2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.184486, 1.39963, -0.627943)
+collision_layer = 4
+collision_mask = 196615
+gravity_scale = 0.0
+script = ExtResource("11_70uel")
+metadata/_custom_type_script = "uid://bfrlpbsqg5lqr"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XRToolsPickable2"]
+mesh = SubResource("BoxMesh_ioo17")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRToolsPickable2"]
+shape = SubResource("BoxShape3D_wse8f")
+
+[node name="XRToolsGrabPointHand" type="Marker3D" parent="XRToolsPickable2"]
+transform = Transform3D(0.990372, 0, -0.13843, 0, 1, 0, 0.13843, 0, 0.990372, -0.0377333, 0.0682689, -0.107987)
+script = ExtResource("10_k3n1d")
+hand_pose = SubResource("Resource_70uel")
+metadata/_custom_type_script = "uid://dx3swqg2owe4p"
+
+[node name="XRToolsGrabPointHand2" type="Marker3D" parent="XRToolsPickable2"]
+transform = Transform3D(0.932254, 0, 0.361804, 0, 1, 0, -0.361804, 0, 0.932254, -0.0859342, 0.0682689, -0.0567318)
+script = ExtResource("10_k3n1d")
+hand_pose = SubResource("Resource_70uel")
+metadata/_custom_type_script = "uid://dx3swqg2owe4p"

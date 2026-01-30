@@ -1,0 +1,122 @@
+[gd_scene load_steps=19 format=3 uid="uid://d1lxwtyiswv04"]
+
+[ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="1_0rnww"]
+[ext_resource type="Script" uid="uid://coneyie31d75v" path="res://level/menu/menu_3d.gd" id="1_rgox8"]
+[ext_resource type="Script" uid="uid://ces1j6plojyra" path="res://addons/godot-xr-tools/xr/start_xr.gd" id="2_awkfm"]
+[ext_resource type="Texture2D" uid="uid://ccdhterks82r3" path="res://addons/kenney_prototype_textures/purple/texture_01.png" id="3_p1njt"]
+[ext_resource type="Script" uid="uid://ck4yn3hxuobj7" path="res://addons/godot-xr-tools/player/player_body.gd" id="4_ch51b"]
+[ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="5_bh1mj"]
+[ext_resource type="PackedScene" uid="uid://draj06x6rcddu" path="res://UI/menu_ui_2d.tscn" id="7_j5tum"]
+[ext_resource type="Shader" uid="uid://bbo6riltjm7cn" path="res://level/menu/menu_3d.gdshader" id="7_nb3gs"]
+[ext_resource type="Script" uid="uid://c655kglvddes3" path="res://level/menu/open_xr_composition_layer_quad.gd" id="8_6fhkg"]
+[ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="9_ot2ax"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f3sb7"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_fj7yv"]
+sky_material = SubResource("ProceduralSkyMaterial_f3sb7")
+
+[sub_resource type="Environment" id="Environment_tlwt5"]
+background_mode = 2
+sky = SubResource("Sky_fj7yv")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fj7yv"]
+albedo_texture = ExtResource("3_p1njt")
+uv1_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tlwt5"]
+size = Vector2(1000, 1000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aqk2v"]
+size = Vector3(1000, 0.1, 1000)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6fhkg"]
+render_priority = 0
+shader = ExtResource("7_nb3gs")
+shader_parameter/color = Color(1, 0, 0, 0.5)
+shader_parameter/energy = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rgox8"]
+top_radius = 0.01
+bottom_radius = 0.001
+height = 1.5
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_rgox8")
+
+[node name="XRSimulator" parent="." instance=ExtResource("1_0rnww")]
+controller_selection_mode = 1
+
+[node name="XRToolsStartXR" type="Node" parent="."]
+script = ExtResource("2_awkfm")
+metadata/_custom_type_script = "uid://ces1j6plojyra"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_tlwt5")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+light_energy = 0.1
+shadow_enabled = true
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+material_override = SubResource("StandardMaterial3D_fj7yv")
+mesh = SubResource("PlaneMesh_tlwt5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_aqk2v")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRToolsPlayerBody" type="CharacterBody3D" parent="XROrigin3D"]
+script = ExtResource("4_ch51b")
+metadata/_custom_type_script = "uid://ck4yn3hxuobj7"
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 1.11)
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.4, 0.663765)
+tracker = &"left_hand"
+
+[node name="LeftHand" parent="XROrigin3D/LeftHand" instance=ExtResource("5_bh1mj")]
+
+[node name="Pointer" type="MeshInstance3D" parent="XROrigin3D/LeftHand"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.76)
+material_override = SubResource("ShaderMaterial_6fhkg")
+mesh = SubResource("CylinderMesh_rgox8")
+skeleton = NodePath("../../RightHand")
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.4, 0.663765)
+tracker = &"right_hand"
+
+[node name="RightHand" parent="XROrigin3D/RightHand" instance=ExtResource("9_ot2ax")]
+
+[node name="Pointer" type="MeshInstance3D" parent="XROrigin3D/RightHand"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.76)
+material_override = SubResource("ShaderMaterial_6fhkg")
+mesh = SubResource("CylinderMesh_rgox8")
+
+[node name="OpenXRCompositionLayerQuad" type="OpenXRCompositionLayerQuad" parent="XROrigin3D" node_paths=PackedStringArray("layer_viewport", "controller")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.61699, 0)
+layer_viewport = NodePath("../../SubViewport")
+alpha_blend = true
+XR_FB_composition_layer_alpha_blend/enable_alpha_blend_extension = true
+script = ExtResource("8_6fhkg")
+controller = NodePath("../RightHand")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+render_target_update_mode = 4
+
+[node name="MenuUi2d" parent="SubViewport" instance=ExtResource("7_j5tum")]
+
+[connection signal="button_pressed" from="XROrigin3D/LeftHand" to="." method="_on_left_hand_button_pressed"]
+[connection signal="button_pressed" from="XROrigin3D/RightHand" to="." method="_on_right_hand_button_pressed"]
