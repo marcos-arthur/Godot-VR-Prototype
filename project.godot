@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Godot VR Prototype"
-run/main_scene="uid://drfegasp444u"
+run/main_scene="uid://dpc4dbjq81cm1"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 

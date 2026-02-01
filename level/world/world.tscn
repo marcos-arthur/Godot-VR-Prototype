@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://ddt7jotntxd5m"]
+[gd_scene load_steps=27 format=3 uid="uid://ddt7jotntxd5m"]
 
 [ext_resource type="Texture2D" uid="uid://bpr020pmrwux2" path="res://addons/kenney_prototype_textures/orange/texture_01.png" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://ces1j6plojyra" path="res://addons/godot-xr-tools/xr/start_xr.gd" id="1_fj7yv"]
@@ -14,6 +14,7 @@
 [ext_resource type="Animation" uid="uid://nq3xh1olqipq" path="res://addons/godot-xr-tools/hands/animations/left/Grip Shaft.res" id="11_2o6r5"]
 [ext_resource type="Script" uid="uid://bfrlpbsqg5lqr" path="res://addons/godot-xr-tools/objects/pickable.gd" id="11_70uel"]
 [ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="12_70uel"]
+[ext_resource type="Animation" uid="uid://c8dghcftg1thx" path="res://addons/godot-xr-tools/hands/animations/right/Grip Shaft.res" id="15_8hwax"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f3sb7"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -47,6 +48,16 @@ size = Vector3(0.1, 0.1, 0.1)
 [sub_resource type="Resource" id="Resource_70uel"]
 script = ExtResource("12_70uel")
 closed_pose = ExtResource("11_2o6r5")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="Resource" id="Resource_6nvbj"]
+script = ExtResource("12_70uel")
+closed_pose = ExtResource("15_8hwax")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="Resource" id="Resource_0vrd2"]
+script = ExtResource("12_70uel")
+closed_pose = ExtResource("15_8hwax")
 metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
 
 [node name="Node3D" type="Node3D"]
@@ -108,6 +119,10 @@ tracker = &"right_hand"
 [node name="MovementTurn" parent="XROrigin3D/RightHand" instance=ExtResource("9_ioo17")]
 turn_mode = 2
 
+[node name="XRToolsFunctionPickup" type="Node3D" parent="XROrigin3D/RightHand"]
+script = ExtResource("8_2o6r5")
+metadata/_custom_type_script = "uid://b18kkstg643yw"
+
 [node name="XRToolsPickable2" type="RigidBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.184486, 1.39963, -0.627943)
 collision_layer = 4
@@ -132,4 +147,18 @@ metadata/_custom_type_script = "uid://dx3swqg2owe4p"
 transform = Transform3D(0.932254, 0, 0.361804, 0, 1, 0, -0.361804, 0, 0.932254, -0.0859342, 0.0682689, -0.0567318)
 script = ExtResource("10_k3n1d")
 hand_pose = SubResource("Resource_70uel")
+metadata/_custom_type_script = "uid://dx3swqg2owe4p"
+
+[node name="XRToolsGrabPointHand3" type="Marker3D" parent="XRToolsPickable2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0411557, 0.073239, -0.112044)
+script = ExtResource("10_k3n1d")
+hand = 1
+hand_pose = SubResource("Resource_6nvbj")
+metadata/_custom_type_script = "uid://dx3swqg2owe4p"
+
+[node name="XRToolsGrabPointHand4" type="Marker3D" parent="XRToolsPickable2"]
+transform = Transform3D(0.953185, 0, -0.302387, 0, 1, 0, 0.302387, 0, 0.953185, 0.0669974, 0.0674951, -0.0593194)
+script = ExtResource("10_k3n1d")
+hand = 1
+hand_pose = SubResource("Resource_0vrd2")
 metadata/_custom_type_script = "uid://dx3swqg2owe4p"

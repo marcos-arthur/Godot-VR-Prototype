@@ -104,9 +104,11 @@ material_override = SubResource("ShaderMaterial_6fhkg")
 mesh = SubResource("CylinderMesh_rgox8")
 
 [node name="OpenXRCompositionLayerQuad" type="OpenXRCompositionLayerQuad" parent="XROrigin3D" node_paths=PackedStringArray("layer_viewport", "controller")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.61699, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.61699, -1.40488)
 layer_viewport = NodePath("../../SubViewport")
+sort_order = -1
 alpha_blend = true
+enable_hole_punch = true
 XR_FB_composition_layer_alpha_blend/enable_alpha_blend_extension = true
 script = ExtResource("8_6fhkg")
 controller = NodePath("../RightHand")
